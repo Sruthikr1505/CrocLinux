@@ -50,12 +50,12 @@ git commit -m "Initial CrocLinux release - Complete Blue Team distribution"
 
 3. **Copy Repository URL**
    - GitHub will show you the repository URL
-   - Copy it (e.g., `https://github.com/YOUR-USERNAME/CrocLinux.git`)
+   - Copy it (e.g., `https://github.com/Sruthikr1505/CrocLinux.git`)
 
 ### Step 3: Connect Local Repository to GitHub
 ```bash
 # Add remote (replace YOUR-USERNAME with your GitHub username)
-git remote add origin https://github.com/YOUR-USERNAME/CrocLinux.git
+git remote add origin https://github.com/Sruthikr1505/CrocLinux.git
 
 # Verify remote
 git remote -v
