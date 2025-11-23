@@ -1,0 +1,8 @@
+# CrocLinux SHA-512 checksums
+# Generate using: sha512sum <file> >> release/sha512sums.txt
+# Replace PLACEHOLDER values after building artifacts.
+
+PLACEHOLDER_SHA512  CrocLinux-v1.0.0-full.iso
+PLACEHOLDER_SHA512  CrocLinux-v1.0.0-mini.iso
+PLACEHOLDER_SHA512  CrocLinux-v1.0.0.ova
+PLACEHOLDER_SHA512  CrocLinux-v1.0.0.vhdx

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Volatility3 (Terminal)
+Comment=Run Volatility3 memory forensics in a terminal
+Exec=xfce4-terminal --title="Volatility3" -e "bash -lc 'volatility3 --help; exec bash'"
+Icon=utilities-terminal
+Terminal=false
+Type=Application
+Categories=BlueTeam;EndpointForensics;Security;

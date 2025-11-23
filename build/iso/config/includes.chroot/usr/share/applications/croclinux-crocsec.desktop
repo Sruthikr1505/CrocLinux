@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=CrocSec Assistant
+Comment=Interactive CrocSec CLI helper
+Exec=xfce4-terminal --title="CrocSec Assistant" -e "bash -lc 'crocsec summary; exec bash'"
+Icon=applications-utilities
+Terminal=false
+Type=Application
+Categories=BlueTeam;AutomationTools;Security;

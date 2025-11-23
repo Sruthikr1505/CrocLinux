@@ -1,0 +1,34 @@
+# CrocLinux Official Download Links
+# Update URLs after each release is published on GitHub
+
+[Direct Downloads - GitHub Releases]
+Full ISO (64-bit): https://github.com/your-username/CrocLinux/releases/download/v1.0.0/CrocLinux-full-YYYYMMDD.iso
+Mini ISO (64-bit): https://github.com/your-username/CrocLinux/releases/download/v1.0.0/CrocLinux-mini-YYYYMMDD.iso
+OVA Appliance (VirtualBox/VMware): https://github.com/your-username/CrocLinux/releases/download/v1.0.0/CrocLinux-v1.0.0.ova
+VMDK Image (VMware): https://github.com/your-username/CrocLinux/releases/download/v1.0.0/CrocLinux-v1.0.0.vmdk
+
+[Torrents] (Coming Soon)
+Full ISO torrent: magnet:?xt=urn:btih:PLACEHOLDER_FULL
+Mini ISO torrent: magnet:?xt=urn:btih:PLACEHOLDER_MINI
+OVA torrent:      magnet:?xt=urn:btih:PLACEHOLDER_OVA
+
+[Verification Files]
+SHA-256 Checksums: https://github.com/your-username/CrocLinux/releases/download/v1.0.0/sha256sums.txt
+SHA-512 Checksums: https://github.com/your-username/CrocLinux/releases/download/v1.0.0/sha512sums.txt
+GPG Signatures:    https://github.com/your-username/CrocLinux/releases/download/v1.0.0/CrocLinux-v1.0.0.sig
+
+[Quick Start]
+1. Download ISO or OVA from Releases page
+2. Verify checksums: sha256sum -c sha256sums.txt
+3. Import OVA into VirtualBox/VMware, or create bootable USB from ISO
+4. Login: analyst / Croc!2025
+5. Change password immediately: passwd
+
+[Documentation]
+Download Guide: https://github.com/your-username/CrocLinux/blob/main/docs/download-guide.md
+Install Guide:  https://github.com/your-username/CrocLinux/blob/main/docs/install-guide.md
+First Boot:     https://github.com/your-username/CrocLinux/blob/main/docs/first-boot.md
+
+[Note]
+Replace "your-username" with your actual GitHub username.
+Update version numbers and dates after each release.

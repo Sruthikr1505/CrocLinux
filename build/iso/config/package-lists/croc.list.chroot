@@ -1,0 +1,48 @@
+# NOTE: This file is overwritten by scripts/build/build_iso_variant.sh.
+# Edit croclinux-full.list.chroot or croclinux-mini.list.chroot instead.
+
+# Base desktop
+lightdm
+xfce4
+xfce4-goodies
+network-manager
+
+# Security and hardening
+ufw
+apparmor
+apparmor-utils
+auditd
+fail2ban
+needrestart
+
+# SOC tooling
+wazuh-manager
+filebeat
+elasticsearch
+kibana
+misp
+thehive
+cortex
+velociraptor
+autopsy
+sleuthkit
+volatility3
+grr-server
+yara
+sigma
+osquery
+suricata
+sysmonforlinux
+
+# Utilities
+git
+jq
+python3
+python3-pip
+python3-venv
+curl
+wget
+tmux
+htop
+neofetch
+

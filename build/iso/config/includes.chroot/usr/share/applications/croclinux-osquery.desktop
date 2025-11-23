@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=OSQuery Shell
+Comment=Interactive OSQueryi shell for endpoint telemetry
+Exec=xfce4-terminal --title="osqueryi" -e "bash -lc 'sudo osqueryi; exec bash'"
+Icon=utilities-terminal
+Terminal=false
+Type=Application
+Categories=BlueTeam;EndpointForensics;AutomationTools;Security;

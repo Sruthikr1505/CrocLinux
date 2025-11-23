@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=IDS Dashboard (Suricata + Snort)
+Comment=View Suricata and Snort alerts in Kibana dashboard
+Exec=xdg-open https://127.0.0.1:5601/app/dashboards#/view/croc-threat-correlation
+Icon=utilities-system-monitor
+Terminal=false
+Type=Application
+Categories=BlueTeam;NetworkMonitoring;SIEMDashboards;Security;
+StartupNotify=true
+

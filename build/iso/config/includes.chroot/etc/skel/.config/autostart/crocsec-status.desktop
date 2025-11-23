@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Exec=xfce4-terminal -H -x watch -n 10 "sudo systemctl --no-pager status wazuh-manager suricata thehive cortex velociraptor"
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name=CrocSec Service Watch
+Comment=Monitor critical Croc Linux services at login
+

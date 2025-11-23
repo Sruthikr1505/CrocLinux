@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=TheHive Incident Console
+Comment=Manage incident cases via TheHive
+Exec=xdg-open http://127.0.0.1:9000
+Icon=dialog-information
+Terminal=false
+Type=Application
+Categories=BlueTeam;IncidentResponse;Security;

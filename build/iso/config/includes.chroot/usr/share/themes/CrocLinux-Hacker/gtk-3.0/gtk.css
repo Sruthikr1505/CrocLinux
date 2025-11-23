@@ -1,0 +1,221 @@
+/* CrocLinux Hacker Aesthetic Theme - Green on Black (Matrix Style) */
+
+@define-color hacker_bg #000000;
+@define-color hacker_fg #00ff00;
+@define-color hacker_green #00ff00;
+@define-color hacker_green_dark #00cc00;
+@define-color hacker_green_light #33ff33;
+@define-color hacker_blue #00a8ff;
+@define-color hacker_selection #00ff00;
+@define-color hacker_selection_fg #000000;
+@define-color hacker_border #00ff00;
+@define-color hacker_warning #ffff00;
+@define-color hacker_error #ff0000;
+
+* {
+    -GtkWidget-focus-padding: 1;
+    -GtkWidget-focus-line-width: 2;
+}
+
+window {
+    background-color: @hacker_bg;
+    color: @hacker_fg;
+    border: 1px solid @hacker_border;
+}
+
+button {
+    background-color: @hacker_bg;
+    color: @hacker_fg;
+    border: 2px solid @hacker_green;
+    border-radius: 0px;
+    padding: 8px 16px;
+    font-weight: bold;
+    text-shadow: 0 0 5px @hacker_green;
+}
+
+button:hover {
+    background-color: @hacker_green;
+    color: @hacker_bg;
+    box-shadow: 0 0 10px @hacker_green;
+    text-shadow: none;
+}
+
+button:active {
+    background-color: @hacker_green_dark;
+    color: @hacker_bg;
+    box-shadow: 0 0 15px @hacker_green;
+}
+
+button:focus {
+    border-color: @hacker_blue;
+    box-shadow: 0 0 10px @hacker_blue;
+}
+
+entry {
+    background-color: @hacker_bg;
+    color: @hacker_fg;
+    border: 2px solid @hacker_green;
+    border-radius: 0px;
+    padding: 8px;
+    font-family: "JetBrains Mono", monospace;
+    text-shadow: 0 0 3px @hacker_green;
+}
+
+entry:focus {
+    border-color: @hacker_blue;
+    box-shadow: 0 0 10px @hacker_blue, inset 0 0 5px @hacker_green;
+    text-shadow: 0 0 5px @hacker_green;
+}
+
+entry:selected {
+    background-color: @hacker_green;
+    color: @hacker_bg;
+}
+
+notebook {
+    background-color: @hacker_bg;
+    color: @hacker_fg;
+    border: 1px solid @hacker_green;
+}
+
+notebook tab {
+    background-color: @hacker_bg;
+    color: @hacker_fg;
+    border: 1px solid @hacker_green;
+    padding: 8px 16px;
+    font-weight: bold;
+}
+
+notebook tab:checked {
+    background-color: @hacker_green;
+    color: @hacker_bg;
+    box-shadow: 0 0 10px @hacker_green;
+}
+
+notebook tab:hover {
+    background-color: @hacker_green_dark;
+    color: @hacker_bg;
+}
+
+menu {
+    background-color: @hacker_bg;
+    color: @hacker_fg;
+    border: 2px solid @hacker_green;
+    padding: 4px;
+}
+
+menuitem {
+    background-color: @hacker_bg;
+    color: @hacker_fg;
+    padding: 8px;
+    border: 1px solid transparent;
+}
+
+menuitem:hover {
+    background-color: @hacker_green;
+    color: @hacker_bg;
+    border: 1px solid @hacker_green;
+    box-shadow: 0 0 5px @hacker_green;
+}
+
+menuitem:selected {
+    background-color: @hacker_green;
+    color: @hacker_bg;
+}
+
+toolbar {
+    background-color: @hacker_bg;
+    color: @hacker_fg;
+    border-bottom: 2px solid @hacker_green;
+    padding: 4px;
+}
+
+scrollbar {
+    background-color: @hacker_bg;
+    border: 1px solid @hacker_green;
+}
+
+scrollbar slider {
+    background-color: @hacker_green;
+    border: 1px solid @hacker_green_dark;
+    box-shadow: 0 0 5px @hacker_green;
+}
+
+scrollbar slider:hover {
+    background-color: @hacker_green_light;
+    box-shadow: 0 0 10px @hacker_green;
+}
+
+scrollbar trough {
+    background-color: @hacker_bg;
+    border: 1px solid @hacker_green;
+}
+
+/* Selection colors */
+selection {
+    background-color: @hacker_selection;
+    color: @hacker_selection_fg;
+}
+
+/* Focus outline with glow effect */
+*:focus {
+    outline: 2px solid @hacker_blue;
+    outline-offset: 2px;
+    box-shadow: 0 0 10px @hacker_blue;
+}
+
+/* Text input glow */
+textview text {
+    background-color: @hacker_bg;
+    color: @hacker_fg;
+    text-shadow: 0 0 3px @hacker_green;
+}
+
+/* Label glow effect */
+label {
+    text-shadow: 0 0 3px @hacker_green;
+}
+
+/* Progress bar */
+progressbar {
+    background-color: @hacker_bg;
+    border: 1px solid @hacker_green;
+}
+
+progressbar progress {
+    background-color: @hacker_green;
+    box-shadow: 0 0 10px @hacker_green;
+}
+
+/* Tree view */
+treeview {
+    background-color: @hacker_bg;
+    color: @hacker_fg;
+}
+
+treeview:selected {
+    background-color: @hacker_green;
+    color: @hacker_bg;
+}
+
+treeview:hover {
+    background-color: @hacker_green_dark;
+    color: @hacker_bg;
+}
+
+/* Status bar */
+statusbar {
+    background-color: @hacker_bg;
+    color: @hacker_fg;
+    border-top: 1px solid @hacker_green;
+}
+
+/* Tooltip */
+tooltip {
+    background-color: @hacker_bg;
+    color: @hacker_fg;
+    border: 1px solid @hacker_green;
+    padding: 4px 8px;
+    box-shadow: 0 0 10px @hacker_green;
+}
+

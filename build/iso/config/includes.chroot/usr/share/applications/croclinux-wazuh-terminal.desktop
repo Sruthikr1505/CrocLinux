@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Wazuh CLI (Terminal)
+Comment=Open Wazuh command-line interface
+Exec=xfce4-terminal --title="Wazuh CLI" -e "bash -lc 'sudo /var/ossec/bin/wazuh-control status; echo ""; echo \"Wazuh Commands:\"; echo \"  sudo /var/ossec/bin/wazuh-control status\"; echo \"  sudo /var/ossec/bin/wazuh-control restart\"; echo \"  sudo tail -f /var/ossec/logs/alerts/alerts.json\"; exec bash'"
+Icon=utilities-terminal
+Terminal=false
+Type=Application
+Categories=BlueTeam;SIEMDashboards;Security;
+StartupNotify=true
+

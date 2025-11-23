@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Snort IDS Manager
+Comment=Manage Snort IDS configuration and view alerts
+Exec=xfce4-terminal --title="Snort IDS" -e "bash -lc 'echo \"Snort IDS Management\"; echo \"===================\"; echo \"\"; echo \"Status:\"; sudo systemctl status snort --no-pager; echo \"\"; echo \"View Alerts:\"; echo \"  sudo tail -f /var/log/snort/alert\"; echo \"\"; echo \"Configuration:\"; echo \"  sudo nano /etc/snort/snort.conf\"; echo \"\"; echo \"Control:\"; echo \"  sudo systemctl start/stop/restart snort\"; exec bash'"
+Icon=network-wireless
+Terminal=false
+Type=Application
+Categories=BlueTeam;NetworkMonitoring;Security;
+StartupNotify=true
+

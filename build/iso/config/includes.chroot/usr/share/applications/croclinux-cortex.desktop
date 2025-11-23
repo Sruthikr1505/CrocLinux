@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Cortex Analyzers
+Comment=Run automated analyzers from Cortex
+Exec=xdg-open http://127.0.0.1:9001
+Icon=utilities-terminal
+Terminal=false
+Type=Application
+Categories=BlueTeam;IncidentResponse;AutomationTools;Security;

@@ -1,0 +1,111 @@
+/* CrocLinux GTK Theme - Dark theme with blue accents */
+
+@define-color croc_dark_bg #1a1a1a;
+@define-color croc_dark_fg #e0e0e0;
+@define-color croc_blue_accent #00a8ff;
+@define-color croc_blue_dark #0084cc;
+@define-color croc_selection_bg #00a8ff;
+@define-color croc_selection_fg #ffffff;
+
+* {
+    -GtkWidget-focus-padding: 1;
+    -GtkWidget-focus-line-width: 1;
+}
+
+window {
+    background-color: @croc_dark_bg;
+    color: @croc_dark_fg;
+}
+
+button {
+    background-color: @croc_dark_bg;
+    color: @croc_dark_fg;
+    border: 1px solid @croc_blue_accent;
+    border-radius: 4px;
+}
+
+button:hover {
+    background-color: @croc_blue_dark;
+    color: @croc_dark_fg;
+}
+
+button:active {
+    background-color: @croc_blue_accent;
+    color: @croc_dark_fg;
+}
+
+entry {
+    background-color: @croc_dark_bg;
+    color: @croc_dark_fg;
+    border: 1px solid @croc_blue_accent;
+    border-radius: 4px;
+}
+
+entry:focus {
+    border-color: @croc_blue_accent;
+    box-shadow: 0 0 5px @croc_blue_accent;
+}
+
+notebook {
+    background-color: @croc_dark_bg;
+    color: @croc_dark_fg;
+}
+
+notebook tab {
+    background-color: @croc_dark_bg;
+    color: @croc_dark_fg;
+    border: 1px solid @croc_blue_accent;
+}
+
+notebook tab:checked {
+    background-color: @croc_blue_accent;
+    color: @croc_dark_fg;
+}
+
+menu {
+    background-color: @croc_dark_bg;
+    color: @croc_dark_fg;
+    border: 1px solid @croc_blue_accent;
+}
+
+menuitem {
+    background-color: @croc_dark_bg;
+    color: @croc_dark_fg;
+}
+
+menuitem:hover {
+    background-color: @croc_blue_dark;
+    color: @croc_dark_fg;
+}
+
+toolbar {
+    background-color: @croc_dark_bg;
+    color: @croc_dark_fg;
+    border-bottom: 1px solid @croc_blue_accent;
+}
+
+scrollbar {
+    background-color: @croc_dark_bg;
+}
+
+scrollbar slider {
+    background-color: @croc_blue_accent;
+    border-radius: 4px;
+}
+
+scrollbar slider:hover {
+    background-color: @croc_blue_dark;
+}
+
+/* Selection colors */
+selection {
+    background-color: @croc_selection_bg;
+    color: @croc_selection_fg;
+}
+
+/* Focus outline */
+*:focus {
+    outline: 2px solid @croc_blue_accent;
+    outline-offset: 2px;
+}
+

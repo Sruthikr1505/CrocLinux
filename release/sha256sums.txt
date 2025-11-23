@@ -1,0 +1,8 @@
+# CrocLinux SHA-256 checksums
+# Generate using: sha256sum <file> >> release/sha256sums.txt
+# Replace PLACEHOLDER values after building artifacts.
+
+PLACEHOLDER_SHA256  CrocLinux-v1.0.0-full.iso
+PLACEHOLDER_SHA256  CrocLinux-v1.0.0-mini.iso
+PLACEHOLDER_SHA256  CrocLinux-v1.0.0.ova
+PLACEHOLDER_SHA256  CrocLinux-v1.0.0.vhdx

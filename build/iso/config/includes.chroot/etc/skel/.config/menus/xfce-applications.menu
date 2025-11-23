@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+ "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd">
+<Menu>
+  <Name>Applications</Name>
+  <Merge type="system"/>
+
+  <Menu>
+    <Name>Blue Team</Name>
+    <Directory>croc-blueteam.directory</Directory>
+
+    <Menu>
+      <Name>SIEM &amp; Dashboards</Name>
+      <Directory>croc-siem-dashboard.directory</Directory>
+      <Include>
+        <Category>SIEMDashboards</Category>
+      </Include>
+    </Menu>
+
+    <Menu>
+      <Name>Threat Intelligence</Name>
+      <Directory>croc-threat-intel.directory</Directory>
+      <Include>
+        <Category>ThreatIntelligence</Category>
+      </Include>
+    </Menu>
+
+    <Menu>
+      <Name>Incident Response</Name>
+      <Directory>croc-incident-response.directory</Directory>
+      <Include>
+        <Category>IncidentResponse</Category>
+      </Include>
+    </Menu>
+
+    <Menu>
+      <Name>Endpoint Forensics</Name>
+      <Directory>croc-endpoint-forensics.directory</Directory>
+      <Include>
+        <Category>EndpointForensics</Category>
+      </Include>
+    </Menu>
+
+    <Menu>
+      <Name>Network Monitoring</Name>
+      <Directory>croc-network-monitoring.directory</Directory>
+      <Include>
+        <Category>NetworkMonitoring</Category>
+      </Include>
+    </Menu>
+
+    <Menu>
+      <Name>Automation &amp; Scripting</Name>
+      <Directory>croc-automation.directory</Directory>
+      <Include>
+        <Category>AutomationTools</Category>
+      </Include>
+    </Menu>
+  </Menu>
+</Menu>

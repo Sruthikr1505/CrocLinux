@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Suricata IDS Manager
+Comment=Manage Suricata IDS configuration and view alerts
+Exec=xfce4-terminal --title="Suricata IDS" -e "bash -lc 'echo \"Suricata IDS Management\"; echo \"=====================\"; echo \"\"; echo \"Status:\"; sudo systemctl status suricata --no-pager; echo \"\"; echo \"View Alerts:\"; echo \"  sudo tail -f /var/log/suricata/eve.json | jq\"; echo \"\"; echo \"Configuration:\"; echo \"  sudo nano /etc/suricata/suricata.yaml\"; echo \"\"; echo \"Control:\"; echo \"  sudo systemctl start/stop/restart suricata\"; echo \"  sudo suricatasc -c reload-rules\"; exec bash'"
+Icon=network-wireless
+Terminal=false
+Type=Application
+Categories=BlueTeam;NetworkMonitoring;Security;
+StartupNotify=true
+

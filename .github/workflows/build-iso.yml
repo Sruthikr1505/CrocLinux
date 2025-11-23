@@ -1,0 +1,126 @@
+name: Build CrocLinux ISO
+
+on:
+  workflow_dispatch:
+    inputs:
+      variant:
+        description: 'ISO variant to build'
+        required: true
+        type: choice
+        options:
+          - full
+          - mini
+          - both
+  push:
+    tags:
+      - 'v*'
+  schedule:
+    # Optional: Weekly build on Sundays at 2 AM UTC
+    - cron: '0 2 * * 0'
+
+jobs:
+  build-iso:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 180
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            live-build \
+            debootstrap \
+            xorriso \
+            squashfs-tools \
+            curl \
+            wget \
+            gnupg2
+
+      - name: Set up build environment
+        run: |
+          sudo mkdir -p /var/cache/live
+          sudo chmod 777 /var/cache/live
+
+      - name: Build Full ISO
+        if: |
+          (github.event_name == 'workflow_dispatch' && github.event.inputs.variant == 'full') ||
+          (github.event_name == 'workflow_dispatch' && github.event.inputs.variant == 'both') ||
+          (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'))
+        run: |
+          chmod +x scripts/build/build_iso_variant.sh
+          ./scripts/build/build_iso_variant.sh full
+
+      - name: Build Mini ISO
+        if: |
+          (github.event_name == 'workflow_dispatch' && github.event.inputs.variant == 'mini') ||
+          (github.event_name == 'workflow_dispatch' && github.event.inputs.variant == 'both') ||
+          (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'))
+        run: |
+          chmod +x scripts/build/build_iso_variant.sh
+          ./scripts/build/build_iso_variant.sh mini
+
+      - name: Install Packer for VM image creation
+        uses: hashicorp/setup-packer@main
+        with:
+          version: "1.10.0"
+
+      - name: Build VM Images (OVA/VMDK)
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          chmod +x scripts/build/build_vm_images.sh
+          # Build VM images for both variants if available
+          ls -la release/*.iso || echo "No ISOs found for VM build"
+          for iso in release/CrocLinux-*.iso; do
+            if [ -f "$iso" ]; then
+              variant=$(echo "$iso" | sed 's/.*CrocLinux-\([^-]*\)-.*/\1/')
+              echo "[+] Building VM images for variant: $variant"
+              ./scripts/build/build_vm_images.sh "$variant" || echo "[!] VM build failed for $variant"
+            fi
+          done
+        continue-on-error: true
+
+      - name: Generate checksums
+        run: |
+          cd release
+          sha256sum *.iso *.ova 2>/dev/null > sha256sums.txt || sha256sum *.iso 2>/dev/null > sha256sums.txt || true
+          sha512sum *.iso *.ova 2>/dev/null > sha512sums.txt || sha512sum *.iso 2>/dev/null > sha512sums.txt || true
+          cat sha256sums.txt
+          cat sha512sums.txt
+
+      - name: Upload ISO artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: croclinux-isos
+          path: |
+            release/*.iso
+            release/sha256sums.txt
+            release/sha512sums.txt
+          retention-days: 30
+
+      - name: Upload VM images
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/upload-artifact@v4
+        with:
+          name: croclinux-vm-images
+          path: |
+            release/vm-build/*.ova
+          retention-days: 30
+        continue-on-error: true
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            release/*.iso
+            release/vm-build/*.ova
+            release/sha256sums.txt
+            release/sha512sums.txt
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+

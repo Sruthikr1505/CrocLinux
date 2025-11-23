@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Wazuh SIEM Console
+Comment=Open the Wazuh security events console
+Exec=xdg-open https://127.0.0.1:5601/app/wazuh
+Icon=security-medium
+Terminal=false
+Type=Application
+Categories=BlueTeam;SIEMDashboards;Security;

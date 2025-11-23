@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Wazuh Manager Console
+Comment=Open Wazuh Manager web interface and management console
+Exec=xdg-open https://127.0.0.1:5601/app/wazuh
+Icon=security-high
+Terminal=false
+Type=Application
+Categories=BlueTeam;SIEMDashboards;Security;
+StartupNotify=true
+

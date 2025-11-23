@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Autopsy Digital Forensics
+Comment=Launch Autopsy forensic workstation
+Exec=autopsy
+Icon=accessories-text-editor
+Terminal=false
+Type=Application
+Categories=BlueTeam;EndpointForensics;Security;

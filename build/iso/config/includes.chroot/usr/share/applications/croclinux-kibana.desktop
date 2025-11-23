@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Kibana (CrocSec Dashboard)
+Comment=Launch Kibana dashboards for Wazuh alert correlation
+Exec=xdg-open https://127.0.0.1:5601/app/dashboards#/view/croc-threat-correlation
+Icon=utilities-system-monitor
+Terminal=false
+Type=Application
+Categories=BlueTeam;SIEMDashboards;Security;

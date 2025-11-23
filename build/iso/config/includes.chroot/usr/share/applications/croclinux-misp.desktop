@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=MISP Threat Platform
+Comment=Launch the Malware Information Sharing Platform UI
+Exec=xdg-open https://127.0.0.1/
+Icon=preferences-system-network
+Terminal=false
+Type=Application
+Categories=BlueTeam;ThreatIntelligence;Security;

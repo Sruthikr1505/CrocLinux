@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=CrocLinux Hacker
+Comment=Hacker aesthetic theme - Green on black (Matrix style) for CrocLinux
+Type=X-GNOME-Metatheme
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=CrocLinux-Hacker
+MetacityTheme=CrocLinux-Hacker
+IconTheme=CrocLinux-Hacker
+CursorTheme=Adwaita
+ButtonLayout=menu:minimize,maximize,close
+

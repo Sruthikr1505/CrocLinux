@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=CrocSec Dashboard
+Comment=Launch the CrocSec unified SOC dashboard
+Exec=xdg-open https://127.0.0.1:5601/app/dashboards#/view/croc-threat-correlation
+Icon=security-high
+Terminal=false
+Categories=Security;Network;
+
