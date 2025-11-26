@@ -58,23 +58,36 @@ unset GIT_CEILING_DIRECTORIES
 echo "[+] Running lb config in empty directory (this will create config/)"
 LOG_FILE="/tmp/lb_config_$$.log"
 
-# Use env -i for completely clean environment
+# Set environment variables for live-build 3.0 (Ubuntu 22.04 uses this version)
+# Many options must be set as environment variables, not command-line flags
+export LB_DISTRIBUTION="bookworm"
+export LB_ARCHITECTURES="amd64"
+export LB_LINUX_FLAVOURS="amd64"
+export LB_DEBIAN_MIRROR="http://deb.debian.org/debian/"
+export LB_SECURITY_MIRROR="http://security.debian.org/"
+export LB_BOOTAPPEND_LIVE="boot=live components hostname=croc username=analyst locales=en_US.UTF-8"
+export LB_DESKTOP="xfce"
+export LB_ISO_APPLICATION="CrocLinux"
+export LB_ISO_VOLUME="CROC_LINUX_GUARDIAN"
+export LB_IMAGE_NAME="croc-linux"
+
+# Use env -i for completely clean environment, but preserve our LB_* variables
 sudo env -i \
   HOME="$HOME" \
   PATH="$PATH" \
   USER="$USER" \
   TERM="${TERM:-xterm}" \
-  lb config \
-  --distribution bookworm \
-  --architectures amd64 \
-  --linux-flavours amd64 \
-  --debian-mirror http://deb.debian.org/debian/ \
-  --security-mirror http://security.debian.org/ \
-  --bootappend-live "boot=live components hostname=croc username=analyst locales=en_US.UTF-8" \
-  --desktop xfce \
-  --iso-application "CrocLinux" \
-  --iso-volume "CROC_LINUX_GUARDIAN" \
-  --image-name "croc-linux" > "$LOG_FILE" 2>&1 || {
+  LB_DISTRIBUTION="$LB_DISTRIBUTION" \
+  LB_ARCHITECTURES="$LB_ARCHITECTURES" \
+  LB_LINUX_FLAVOURS="$LB_LINUX_FLAVOURS" \
+  LB_DEBIAN_MIRROR="$LB_DEBIAN_MIRROR" \
+  LB_SECURITY_MIRROR="$LB_SECURITY_MIRROR" \
+  LB_BOOTAPPEND_LIVE="$LB_BOOTAPPEND_LIVE" \
+  LB_DESKTOP="$LB_DESKTOP" \
+  LB_ISO_APPLICATION="$LB_ISO_APPLICATION" \
+  LB_ISO_VOLUME="$LB_ISO_VOLUME" \
+  LB_IMAGE_NAME="$LB_IMAGE_NAME" \
+  lb config > "$LOG_FILE" 2>&1 || {
   echo "[!] Error: lb config failed" >&2
   echo "[!] Full output:" >&2
   cat "$LOG_FILE" >&2 || true
