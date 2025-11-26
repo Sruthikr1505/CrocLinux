@@ -53,41 +53,22 @@ unset GIT_WORK_TREE
 unset GIT_INDEX_FILE
 unset GIT_CEILING_DIRECTORIES
 
-# Run lb config FIRST in completely empty directory with explicit parameters
-# This should create config/ from scratch without trying to clone
+# Run lb config FIRST in completely empty directory
+# live-build 3.0 only accepts basic arguments, rest must be in config files
 echo "[+] Running lb config in empty directory (this will create config/)"
 LOG_FILE="/tmp/lb_config_$$.log"
 
-# Set environment variables for live-build 3.0 (Ubuntu 22.04 uses this version)
-# Many options must be set as environment variables, not command-line flags
-export LB_DISTRIBUTION="bookworm"
-export LB_ARCHITECTURES="amd64"
-export LB_LINUX_FLAVOURS="amd64"
-export LB_DEBIAN_MIRROR="http://deb.debian.org/debian/"
-export LB_SECURITY_MIRROR="http://security.debian.org/"
-export LB_BOOTAPPEND_LIVE="boot=live components hostname=croc username=analyst locales=en_US.UTF-8"
-export LB_DESKTOP="xfce"
-export LB_ISO_APPLICATION="CrocLinux"
-export LB_ISO_VOLUME="CROC_LINUX_GUARDIAN"
-export LB_IMAGE_NAME="croc-linux"
-
-# Use env -i for completely clean environment, but preserve our LB_* variables
+# Use only the basic arguments that lb config accepts in live-build 3.0
+# Other settings will be added to config files after lb config runs
 sudo env -i \
   HOME="$HOME" \
   PATH="$PATH" \
   USER="$USER" \
   TERM="${TERM:-xterm}" \
-  LB_DISTRIBUTION="$LB_DISTRIBUTION" \
-  LB_ARCHITECTURES="$LB_ARCHITECTURES" \
-  LB_LINUX_FLAVOURS="$LB_LINUX_FLAVOURS" \
-  LB_DEBIAN_MIRROR="$LB_DEBIAN_MIRROR" \
-  LB_SECURITY_MIRROR="$LB_SECURITY_MIRROR" \
-  LB_BOOTAPPEND_LIVE="$LB_BOOTAPPEND_LIVE" \
-  LB_DESKTOP="$LB_DESKTOP" \
-  LB_ISO_APPLICATION="$LB_ISO_APPLICATION" \
-  LB_ISO_VOLUME="$LB_ISO_VOLUME" \
-  LB_IMAGE_NAME="$LB_IMAGE_NAME" \
-  lb config > "$LOG_FILE" 2>&1 || {
+  lb config \
+  --distribution bookworm \
+  --architectures amd64 \
+  --linux-flavours amd64 > "$LOG_FILE" 2>&1 || {
   echo "[!] Error: lb config failed" >&2
   echo "[!] Full output:" >&2
   cat "$LOG_FILE" >&2 || true
@@ -106,6 +87,48 @@ if [[ ! -d config ]]; then
 fi
 
 echo "[+] Config directory created successfully by lb config"
+
+# Now add additional settings to config files (these aren't supported as command-line args)
+echo "[+] Adding additional configuration settings to config files"
+
+# Create/update auto/config with all our settings
+mkdir -p config/auto
+cat > config/auto/config <<'EOF'
+#!/bin/sh
+# CrocLinux configuration
+LB_DISTRIBUTION="bookworm"
+LB_ARCHITECTURES="amd64"
+LB_LINUX_FLAVOURS="amd64"
+LB_DEBIAN_MIRROR="http://deb.debian.org/debian/"
+LB_SECURITY_MIRROR="http://security.debian.org/"
+LB_BOOTAPPEND_LIVE="boot=live components hostname=croc username=analyst locales=en_US.UTF-8"
+LB_DESKTOP="xfce"
+LB_ISO_APPLICATION="CrocLinux"
+LB_ISO_VOLUME="CROC_LINUX_GUARDIAN"
+LB_IMAGE_NAME="croc-linux"
+EOF
+
+chmod +x config/auto/config
+
+# Also create config/common if it doesn't exist
+if [[ ! -f config/common ]]; then
+  cat > config/common <<'EOF'
+#!/bin/sh
+LB_DISTRIBUTION="bookworm"
+LB_ARCHITECTURES="amd64"
+LB_LINUX_FLAVOURS="amd64"
+LB_DEBIAN_MIRROR="http://deb.debian.org/debian/"
+LB_SECURITY_MIRROR="http://security.debian.org/"
+LB_BOOTAPPEND_LIVE="boot=live components hostname=croc username=analyst locales=en_US.UTF-8"
+LB_DESKTOP="xfce"
+LB_ISO_APPLICATION="CrocLinux"
+LB_ISO_VOLUME="CROC_LINUX_GUARDIAN"
+LB_IMAGE_NAME="croc-linux"
+EOF
+  chmod +x config/common
+fi
+
+echo "[+] Additional configuration settings added"
 
 # NOW copy our custom configuration files into the generated config directory
 echo "[+] Copying custom configuration files from source"
