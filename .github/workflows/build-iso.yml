@@ -43,6 +43,8 @@ jobs:
         run: |
           sudo mkdir -p /var/cache/live
           sudo chmod 777 /var/cache/live
+          # Ensure release directory exists
+          mkdir -p release
 
       - name: Build Full ISO
         if: |
