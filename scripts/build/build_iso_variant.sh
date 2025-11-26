@@ -35,19 +35,34 @@ cd "$PROJECT_ROOT"
 
 # Create a completely separate build directory outside source tree
 BUILD_ROOT="/tmp/croclinux-build-$$"
+# Remove directory if it exists and create fresh
+sudo rm -rf "$BUILD_ROOT" 2>/dev/null || true
 mkdir -p "$BUILD_ROOT"
 cd "$BUILD_ROOT"
 
 echo "[+] Working in clean build directory: $BUILD_ROOT"
 
-# Clean any previous builds
-echo "[+] Cleaning previous builds"
-sudo lb clean --purge 2>/dev/null || true
-sudo rm -rf config .build binary cache auto 2>/dev/null || true
+# Verify directory is empty
+if [[ -n "$(ls -A 2>/dev/null)" ]]; then
+  echo "[!] Warning: Build directory is not empty, cleaning..."
+  sudo rm -rf .* * 2>/dev/null || true
+fi
+
+# Check for any live-build state files that might cause issues
+sudo rm -f .lb_* .build 2>/dev/null || true
 
 # Initialize live-build configuration
-echo "[+] Initializing live-build configuration"
-sudo lb config \
+# The key is to NOT have any config/ directory when we start
+echo "[+] Initializing live-build configuration (this will create config/ directory)"
+
+# Unset any environment variables that might cause live-build to look for config
+unset LB_CONFIG
+unset LB_CONFIG_DIRECTORY
+
+# Run lb config - it should create the config directory
+# Capture both stdout and stderr
+LOG_FILE="/tmp/lb_config_$$.log"
+if ! sudo -E env -u LB_CONFIG -u LB_CONFIG_DIRECTORY lb config \
   --distribution bookworm \
   --architectures amd64 \
   --linux-flavours amd64 \
@@ -57,13 +72,22 @@ sudo lb config \
   --desktop xfce \
   --iso-application "CrocLinux" \
   --iso-volume "CROC_LINUX_GUARDIAN" \
-  --image-name "croc-linux"
-
-# Verify config directory was created
-if [[ ! -d config ]]; then
-  echo "[!] Error: lb config did not create config/ directory" >&2
+  --image-name "croc-linux" > "$LOG_FILE" 2>&1; then
+  echo "[!] Error: lb config failed" >&2
+  echo "[!] Output:" >&2
+  cat "$LOG_FILE" >&2 || true
   exit 1
 fi
+
+# Check if config was created
+if [[ ! -d config ]]; then
+  echo "[!] Error: lb config did not create config/ directory" >&2
+  echo "[!] Current directory contents:" >&2
+  ls -la >&2 || true
+  exit 1
+fi
+
+echo "[+] Config directory created successfully"
 
 # Copy our custom configuration files into the generated config directory
 echo "[+] Copying custom configuration files from source"
