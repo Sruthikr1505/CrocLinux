@@ -62,9 +62,16 @@ echo "[+] Live-build version: $(lb --version 2>/dev/null || echo 'unknown')"
 unset LB_CONFIG
 unset LB_CONFIG_DIRECTORY
 
+# Unset git-related environment variables that might confuse live-build
+unset GIT_DIR
+unset GIT_WORK_TREE
+unset GIT_INDEX_FILE
+
 # Ensure we're in a completely clean environment
 # Create a minimal config directory structure manually if needed as fallback
 echo "[+] Ensuring clean environment for lb config"
+echo "[+] Working directory: $(pwd)"
+echo "[+] No git context (GIT_DIR unset)"
 
 # Run lb config - it should create the config directory
 # Use explicit --no-auto flag if available, otherwise just run it
