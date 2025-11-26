@@ -41,44 +41,34 @@ mkdir -p "$BUILD_ROOT"
 cd "$BUILD_ROOT"
 
 echo "[+] Working in clean build directory: $BUILD_ROOT"
+echo "[+] Current directory: $(pwd)"
 
-# Verify directory is empty
-if [[ -n "$(ls -A 2>/dev/null)" ]]; then
-  echo "[!] Warning: Build directory is not empty, cleaning..."
-  sudo rm -rf .* * 2>/dev/null || true
-fi
+# Ensure directory is completely empty
+sudo rm -rf .* * 2>/dev/null || true
 
-# Check for any live-build state files that might cause issues
-sudo rm -f .lb_* .build 2>/dev/null || true
-
-# Initialize live-build configuration
-# The key is to NOT have any config/ directory when we start
-echo "[+] Initializing live-build configuration (this will create config/ directory)"
-
-# Check live-build version for debugging
-echo "[+] Live-build version: $(lb --version 2>/dev/null || echo 'unknown')"
-
-# Unset any environment variables that might cause live-build to look for config
+# Unset ALL environment variables that might interfere
 unset LB_CONFIG
 unset LB_CONFIG_DIRECTORY
-
-# Unset git-related environment variables that might confuse live-build
 unset GIT_DIR
 unset GIT_WORK_TREE
 unset GIT_INDEX_FILE
+unset GIT_CEILING_DIRECTORIES
 
-# Ensure we're in a completely clean environment
-# Create a minimal config directory structure manually if needed as fallback
-echo "[+] Ensuring clean environment for lb config"
-echo "[+] Working directory: $(pwd)"
-echo "[+] No git context (GIT_DIR unset)"
+# Initialize live-build configuration
+# Run lb config with explicit parameters - it should create config/ from scratch
+echo "[+] Initializing live-build configuration"
+echo "[+] Running: lb config (this will create config/ directory)"
 
-# Run lb config - it should create the config directory
-# Use explicit --no-auto flag if available, otherwise just run it
+# Use a clean environment and run lb config
+# The key is to NOT have any config/ directory when we start
 LOG_FILE="/tmp/lb_config_$$.log"
-echo "[+] Running lb config..."
-set +e  # Temporarily disable exit on error to capture the actual error
-sudo -E env -u LB_CONFIG -u LB_CONFIG_DIRECTORY lb config \
+
+# Run lb config in a completely clean environment
+sudo env -i \
+  HOME="$HOME" \
+  PATH="$PATH" \
+  USER="$USER" \
+  lb config \
   --distribution bookworm \
   --architectures amd64 \
   --linux-flavours amd64 \
@@ -88,19 +78,15 @@ sudo -E env -u LB_CONFIG -u LB_CONFIG_DIRECTORY lb config \
   --desktop xfce \
   --iso-application "CrocLinux" \
   --iso-volume "CROC_LINUX_GUARDIAN" \
-  --image-name "croc-linux" > "$LOG_FILE" 2>&1
-LB_CONFIG_EXIT=$?
-set -e  # Re-enable exit on error
-
-if [[ $LB_CONFIG_EXIT -ne 0 ]]; then
-  echo "[!] Error: lb config failed with exit code $LB_CONFIG_EXIT" >&2
+  --image-name "croc-linux" > "$LOG_FILE" 2>&1 || {
+  echo "[!] Error: lb config failed" >&2
   echo "[!] Full output:" >&2
   cat "$LOG_FILE" >&2 || true
   echo "[!] Current directory: $(pwd)" >&2
   echo "[!] Directory contents:" >&2
   ls -la >&2 || true
   exit 1
-fi
+}
 
 # Check if config was created
 if [[ ! -d config ]]; then
