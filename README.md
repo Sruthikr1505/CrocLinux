@@ -4,7 +4,7 @@
 
 **Works Exactly Like Kali Linux**: Easy ISO creation, pre-built VM images, organized menu structure, and simple installation process.
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### 📖 Complete Guide: Publish → Build → Download → Use in VirtualBox
 
@@ -29,11 +29,11 @@ This guide covers everything:
 **📊 Visual Guide**: [Publish to VirtualBox](docs/PUBLISH-TO-VIRTUALBOX.md)
 **⚡ Quick Reference**: [Quick Reference Card](docs/QUICK-REFERENCE.md)
 
-## ✨ What's Included?
+## What's Included?
 
-### 🛡️ 50+ Blue Team Tools (Pre-Installed)
+### 50+ Blue Team Tools (Pre-Installed)
 
-#### 🎯 Core Security Tools (Fully Configured)
+####  Core Security Tools (Fully Configured)
 - **Wazuh SIEM**: Complete SIEM/XDR platform with web interface
 - **Suricata IDS/IPS**: High-performance network intrusion detection
 - **Snort IDS**: Lightweight network intrusion detection
@@ -80,7 +80,7 @@ This guide covers everything:
 
 **Complete List**: See [Blue Team Enhancements](docs/blue-team-enhancements.md)
 
-### 🎯 Organized Menu (Like Kali Linux)
+### Organized Menu (Like Kali Linux)
 All tools are organized in the **Blue Team** menu:
 - **SIEM & Dashboards**: Kibana, Wazuh console
 - **Threat Intelligence**: MISP platform
