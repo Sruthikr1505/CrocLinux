@@ -32,9 +32,17 @@ echo "[+] Using package list $SOURCE_LIST"
 # Navigate to build directory
 cd build/iso
 
+# Work in a clean subdirectory to avoid conflicts with source config/
+WORK_DIR="work"
+mkdir -p "$WORK_DIR"
+cd "$WORK_DIR"
+
 # Clean previous builds
 echo "[+] Cleaning previous builds"
 sudo lb clean --purge || true
+
+# Ensure we're starting completely fresh
+sudo rm -rf config .build binary cache auto 2>/dev/null || true
 
 # Initialize live-build configuration
 echo "[+] Initializing live-build configuration"
@@ -51,42 +59,42 @@ sudo lb config \
   --image-name "croc-linux"
 
 # Copy our custom configuration files into the generated config directory
-echo "[+] Copying custom configuration files"
+echo "[+] Copying custom configuration files from source"
 
 # Copy package lists
-if [[ -d ../config/package-lists ]]; then
+if [[ -d ../../config/package-lists ]]; then
   sudo mkdir -p config/package-lists
-  sudo cp ../config/package-lists/*.chroot config/package-lists/ 2>/dev/null || true
+  sudo cp ../../config/package-lists/*.chroot config/package-lists/ 2>/dev/null || true
 fi
 
 # Copy includes.chroot (files to include in the system)
-if [[ -d ../config/includes.chroot ]]; then
-  sudo cp -r ../config/includes.chroot/* config/includes.chroot/ 2>/dev/null || true
+if [[ -d ../../config/includes.chroot ]]; then
+  sudo cp -r ../../config/includes.chroot/* config/includes.chroot/ 2>/dev/null || true
 fi
 
 # Copy includes.binary (files for the ISO)
-if [[ -d ../config/includes.binary ]]; then
-  sudo cp -r ../config/includes.binary/* config/includes.binary/ 2>/dev/null || true
+if [[ -d ../../config/includes.binary ]]; then
+  sudo cp -r ../../config/includes.binary/* config/includes.binary/ 2>/dev/null || true
 fi
 
 # Copy preseed files
-if [[ -d ../preseed ]]; then
+if [[ -d ../../preseed ]]; then
   sudo mkdir -p config/preseed
-  sudo cp ../preseed/* config/preseed/ 2>/dev/null || true
+  sudo cp ../../preseed/* config/preseed/ 2>/dev/null || true
 fi
 
 # Copy scripts to chroot
-if [[ -d ../scripts ]]; then
+if [[ -d ../../scripts ]]; then
   sudo mkdir -p config/includes.chroot/opt/croc/scripts
-  sudo cp -r ../scripts/* config/includes.chroot/opt/croc/scripts/ 2>/dev/null || true
+  sudo cp -r ../../scripts/* config/includes.chroot/opt/croc/scripts/ 2>/dev/null || true
   # Make scripts executable
   sudo find config/includes.chroot/opt/croc/scripts -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
 fi
 
 # Ensure package list is in place
 sudo mkdir -p config/package-lists
-if [[ -f ../config/package-lists/croc.list.chroot ]]; then
-  sudo cp ../config/package-lists/croc.list.chroot config/package-lists/
+if [[ -f ../../config/package-lists/croc.list.chroot ]]; then
+  sudo cp ../../config/package-lists/croc.list.chroot config/package-lists/
 fi
 
 # Build ISO
@@ -108,12 +116,12 @@ fi
 
 # Move ISO to release directory
 DATE_TAG=$(date +%Y%m%d)
-ISO_DEST="../../release/CrocLinux-${VARIANT}-${DATE_TAG}.iso"
+ISO_DEST="../../../release/CrocLinux-${VARIANT}-${DATE_TAG}.iso"
 
-mkdir -p ../../release
+mkdir -p ../../../release
 mv "$ISO_SRC" "$ISO_DEST"
 
-cd ../..
+cd ../../..
 
 echo "[+] ISO written to $ISO_DEST"
 
