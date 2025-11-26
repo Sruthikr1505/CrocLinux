@@ -54,12 +54,12 @@ unset GIT_INDEX_FILE
 unset GIT_CEILING_DIRECTORIES
 
 # Run lb config FIRST in completely empty directory
-# live-build 3.0 only accepts basic arguments, rest must be in config files
+# live-build 3.0 only accepts these basic arguments
 echo "[+] Running lb config in empty directory (this will create config/)"
 LOG_FILE="/tmp/lb_config_$$.log"
 
-# Use only the basic arguments that lb config accepts in live-build 3.0
-# Other settings will be added to config files after lb config runs
+# Use ONLY the arguments that lb config accepts in live-build 3.0
+# All other settings will be added to config files after lb config runs
 sudo env -i \
   HOME="$HOME" \
   PATH="$PATH" \
