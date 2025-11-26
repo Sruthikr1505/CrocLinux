@@ -42,43 +42,59 @@ cd "$BUILD_ROOT"
 
 echo "[+] Working in clean build directory: $BUILD_ROOT"
 
-# Ensure directory is completely empty
-sudo rm -rf .* * 2>/dev/null || true
+# CRITICAL: Ensure directory is completely empty - NO config directory
+sudo rm -rf .* * config 2>/dev/null || true
 
-# COMPLETELY SKIP lb config - manually create everything live-build needs
-echo "[+] Manually creating complete live-build config structure (skipping lb config)"
+# Unset all environment variables that might cause issues
+unset LB_CONFIG
+unset LB_CONFIG_DIRECTORY
+unset GIT_DIR
+unset GIT_WORK_TREE
+unset GIT_INDEX_FILE
+unset GIT_CEILING_DIRECTORIES
 
-# Create all required directories
-mkdir -p config/package-lists
-mkdir -p config/includes.chroot
-mkdir -p config/includes.binary
-mkdir -p config/preseed
-mkdir -p config/archives
-mkdir -p config/source
-mkdir -p config/hooks
+# Run lb config FIRST in completely empty directory with explicit parameters
+# This should create config/ from scratch without trying to clone
+echo "[+] Running lb config in empty directory (this will create config/)"
+LOG_FILE="/tmp/lb_config_$$.log"
 
-# Create the auto/config script - this is what lb config normally creates
-mkdir -p config/auto
-cat > config/auto/config <<'EOF'
-#!/bin/sh
-# Auto-generated config script for CrocLinux
-# This replaces what lb config would normally create
+# Use env -i for completely clean environment
+sudo env -i \
+  HOME="$HOME" \
+  PATH="$PATH" \
+  USER="$USER" \
+  TERM="${TERM:-xterm}" \
+  lb config \
+  --distribution bookworm \
+  --architectures amd64 \
+  --linux-flavours amd64 \
+  --debian-mirror http://deb.debian.org/debian/ \
+  --security-mirror http://security.debian.org/ \
+  --bootappend-live "boot=live components hostname=croc username=analyst locales=en_US.UTF-8" \
+  --desktop xfce \
+  --iso-application "CrocLinux" \
+  --iso-volume "CROC_LINUX_GUARDIAN" \
+  --image-name "croc-linux" > "$LOG_FILE" 2>&1 || {
+  echo "[!] Error: lb config failed" >&2
+  echo "[!] Full output:" >&2
+  cat "$LOG_FILE" >&2 || true
+  echo "[!] Current directory: $(pwd)" >&2
+  echo "[!] Directory contents:" >&2
+  ls -la >&2 || true
+  exit 1
+}
 
-LB_DISTRIBUTION="bookworm"
-LB_ARCHITECTURES="amd64"
-LB_LINUX_FLAVOURS="amd64"
-LB_DEBIAN_MIRROR="http://deb.debian.org/debian/"
-LB_SECURITY_MIRROR="http://security.debian.org/"
-LB_BOOTAPPEND_LIVE="boot=live components hostname=croc username=analyst locales=en_US.UTF-8"
-LB_DESKTOP="xfce"
-LB_ISO_APPLICATION="CrocLinux"
-LB_ISO_VOLUME="CROC_LINUX_GUARDIAN"
-LB_IMAGE_NAME="croc-linux"
-EOF
+# Verify config was created
+if [[ ! -d config ]]; then
+  echo "[!] Error: lb config did not create config/ directory" >&2
+  echo "[!] Current directory contents:" >&2
+  ls -la >&2 || true
+  exit 1
+fi
 
-chmod +x config/auto/config
+echo "[+] Config directory created successfully by lb config"
 
-# Copy our custom configuration files from source
+# NOW copy our custom configuration files into the generated config directory
 echo "[+] Copying custom configuration files from source"
 
 SOURCE_CONFIG="$PROJECT_ROOT/build/iso/config"
@@ -120,20 +136,13 @@ if [[ -d "$SOURCE_SCRIPTS" ]]; then
   sudo find config/includes.chroot/opt/croc/scripts -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
 fi
 
-# Verify config structure
-if [[ ! -d config ]] || [[ ! -f config/auto/config ]]; then
-  echo "[!] Error: Config structure not properly created" >&2
-  exit 1
-fi
+echo "[+] Custom files copied to config directory"
 
-echo "[+] Config directory structure ready (lb config skipped to avoid git clone issue)"
-
-# Build ISO directly - lb build should work with manually created config
+# Build ISO - lb build should now work since lb config was run successfully
 echo "[+] Starting ISO build (this will take 30-60 minutes)..."
 echo "[+] This is a long process - please be patient"
-echo "[+] Note: Using manually created config (lb config was skipped)"
 
-# Run lb build - it should use our manually created config
+# Run lb build - it should detect that config is already initialized
 sudo lb build
 
 # Check for output ISO
