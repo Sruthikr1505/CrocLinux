@@ -1,11 +1,22 @@
-# NOTE: This file is overwritten by scripts/build/build_iso_variant.sh.
-# Edit croclinux-full.list.chroot or croclinux-mini.list.chroot instead.
+# CrocLinux full experience package list
+# Generated from croc.list.chroot (retain this file for variant builds)
 
 # Base desktop
 lightdm
+lightdm-gtk-greeter
+lightdm-gtk-greeter-settings
 xfce4
 xfce4-goodies
 network-manager
+
+# Theme packages
+gtk2-engines
+gtk3-engines
+gnome-themes-standard
+adwaita-icon-theme
+arc-theme
+papirus-icon-theme
+fonts-jetbrains-mono
 
 # Security and hardening
 ufw
@@ -15,24 +26,111 @@ auditd
 fail2ban
 needrestart
 
-# SOC tooling
+# SOC tooling - SIEM & Logging
 wazuh-manager
 filebeat
+packetbeat
+winlogbeat
+auditbeat
+metricbeat
+heartbeat
 elasticsearch
+logstash
 kibana
+
+# Threat Intelligence
 misp
+opencti
+threatingestor
+abuse.ch-feodo-tracker
+
+# SOAR & Case Management
 thehive
 cortex
-velociraptor
+shuffle
+
+# Forensics & Memory Analysis
 autopsy
 sleuthkit
 volatility3
+rekall
 grr-server
-yara
-sigma
-osquery
+velociraptor
+sift-workstation
+
+# Network Security Monitoring
 suricata
+snort
+zeek
+bro
+security-onion
+moloch
+arkime
+wireshark
+tshark
+tcpdump
+networkminer
+netsniff-ng
+
+# Endpoint Detection
+osquery
 sysmonforlinux
+osqueryd
+fleetdm
+
+# Detection Rules
+yara
+yara-rules
+sigma
+sigma-cli
+sigma-converter
+
+# Network Analysis
+nmap
+masscan
+zmap
+netcat
+netcat-traditional
+socat
+
+# Web Application Security (for testing)
+burpsuite
+owasp-zap
+nikto
+sqlmap
+
+# Password Security (for testing)
+john
+hashcat
+hydra
+
+# WiFi Security (for testing)
+aircrack-ng
+reaver
+wifite
+
+# Malware Analysis
+cuckoo-sandbox
+remnux
+joesandbox-cli
+hybrid-analysis-cli
+
+# Antivirus & Rootkit Detection
+clamav
+clamav-daemon
+rkhunter
+chkrootkit
+lynis
+
+# Vulnerability Scanning
+openvas
+nessus
+openvas-cli
+
+# Threat Intelligence CLI
+shodan
+virustotal-cli
+abuse.ch-cli
 
 # Utilities
 git
@@ -45,4 +143,3 @@ wget
 tmux
 htop
 neofetch
-
