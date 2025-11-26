@@ -168,12 +168,12 @@ Before building, verify your setup:
 ```
 
 This checks:
-- ✅ Build scripts are present and executable
-- ✅ GitHub Actions workflow is configured
-- ✅ Package lists are complete
-- ✅ Theme files are in place
-- ✅ Documentation is complete
-- ✅ All configuration scripts are ready
+- Build scripts are present and executable
+- GitHub Actions workflow is configured
+- Package lists are complete
+- Theme files are in place
+- Documentation is complete
+- All configuration scripts are ready
 
 ## 🔧 Building CrocLinux
 
