@@ -2,7 +2,7 @@
 
 > **Blue Team Security Distribution** - Pre-loaded with SOC, SIEM, DFIR, and threat intelligence tools. Built for defenders, by defenders.
 
-**✅ Works Exactly Like Kali Linux**: Easy ISO creation, pre-built VM images, organized menu structure, and simple installation process.
+**Works Exactly Like Kali Linux**: Easy ISO creation, pre-built VM images, organized menu structure, and simple installation process.
 
 ## 🚀 Quick Start
 
@@ -11,11 +11,11 @@
 **👉 Start Here**: [GitHub Publish & Use Guide](docs/GITHUB-PUBLISH-AND-USE.md)
 
 This guide covers everything:
-1. ✅ Publish CrocLinux to GitHub
-2. ✅ Build ISO images (automated)
-3. ✅ Download ISO from GitHub
-4. ✅ Setup VirtualBox
-5. ✅ Install and use CrocLinux
+1. Publish CrocLinux to GitHub
+2. Build ISO images (automated)
+3. Download ISO from GitHub
+4. Setup VirtualBox
+5. Install and use CrocLinux
 
 ### ⚡ Quick Summary (5 Steps)
 
