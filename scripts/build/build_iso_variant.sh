@@ -45,21 +45,25 @@ echo "[+] Working in clean build directory: $BUILD_ROOT"
 # Ensure directory is completely empty
 sudo rm -rf .* * 2>/dev/null || true
 
-# MANUALLY create the config directory structure
-# This avoids the lb config git clone issue entirely
-echo "[+] Manually creating live-build config directory structure"
+# COMPLETELY SKIP lb config - manually create everything live-build needs
+echo "[+] Manually creating complete live-build config structure (skipping lb config)"
 
+# Create all required directories
 mkdir -p config/package-lists
 mkdir -p config/includes.chroot
 mkdir -p config/includes.binary
 mkdir -p config/preseed
 mkdir -p config/archives
 mkdir -p config/source
+mkdir -p config/hooks
 
-# Create the auto/config script that live-build expects
+# Create the auto/config script - this is what lb config normally creates
+mkdir -p config/auto
 cat > config/auto/config <<'EOF'
 #!/bin/sh
 # Auto-generated config script for CrocLinux
+# This replaces what lb config would normally create
+
 LB_DISTRIBUTION="bookworm"
 LB_ARCHITECTURES="amd64"
 LB_LINUX_FLAVOURS="amd64"
@@ -74,60 +78,7 @@ EOF
 
 chmod +x config/auto/config
 
-# Create a basic config file with our settings
-cat > config/common <<'EOF'
-#!/bin/sh
-# Common live-build configuration
-LB_DISTRIBUTION="bookworm"
-LB_ARCHITECTURES="amd64"
-LB_LINUX_FLAVOURS="amd64"
-LB_DEBIAN_MIRROR="http://deb.debian.org/debian/"
-LB_SECURITY_MIRROR="http://security.debian.org/"
-LB_BOOTAPPEND_LIVE="boot=live components hostname=croc username=analyst locales=en_US.UTF-8"
-LB_DESKTOP="xfce"
-LB_ISO_APPLICATION="CrocLinux"
-LB_ISO_VOLUME="CROC_LINUX_GUARDIAN"
-LB_IMAGE_NAME="croc-linux"
-EOF
-
-chmod +x config/common
-
-# Now use lb config to finalize the configuration
-# Since we've manually created the config directory, lb config should use it
-echo "[+] Running lb config to finalize configuration"
-LOG_FILE="/tmp/lb_config_$$.log"
-
-# Try running lb config - if it fails due to git clone issue, we'll skip it
-# and proceed with manual configuration
-set +e
-sudo lb config > "$LOG_FILE" 2>&1
-LB_CONFIG_EXIT=$?
-set -e
-
-if [[ $LB_CONFIG_EXIT -ne 0 ]]; then
-  # Check if the error is the git clone issue
-  if grep -q "fatal: repository" "$LOG_FILE" 2>/dev/null; then
-    echo "[!] Warning: lb config tried to clone config (known issue)" >&2
-    echo "[!] Skipping lb config and using manually created config structure" >&2
-    echo "[!] This should work as we've already created the necessary structure" >&2
-  else
-    # Some other error - show it but continue if config exists
-    if [[ -d config ]]; then
-      echo "[!] Warning: lb config failed with unexpected error, but config exists. Continuing..." >&2
-      echo "[!] lb config output:" >&2
-      cat "$LOG_FILE" >&2 || true
-    else
-      echo "[!] Error: lb config failed and no config directory" >&2
-      echo "[!] Full output:" >&2
-      cat "$LOG_FILE" >&2 || true
-      exit 1
-    fi
-  fi
-fi
-
-echo "[+] Config directory ready"
-
-# Copy our custom configuration files into the generated config directory
+# Copy our custom configuration files from source
 echo "[+] Copying custom configuration files from source"
 
 SOURCE_CONFIG="$PROJECT_ROOT/build/iso/config"
@@ -138,6 +89,11 @@ SOURCE_SCRIPTS="$PROJECT_ROOT/build/iso/scripts"
 if [[ -d "$SOURCE_CONFIG/package-lists" ]]; then
   sudo mkdir -p config/package-lists
   sudo cp "$SOURCE_CONFIG/package-lists"/*.chroot config/package-lists/ 2>/dev/null || true
+fi
+
+# Ensure the selected package list is in place
+if [[ -f "$SOURCE_CONFIG/package-lists/croc.list.chroot" ]]; then
+  sudo cp "$SOURCE_CONFIG/package-lists/croc.list.chroot" config/package-lists/
 fi
 
 # Copy includes.chroot (files to include in the system)
@@ -164,15 +120,20 @@ if [[ -d "$SOURCE_SCRIPTS" ]]; then
   sudo find config/includes.chroot/opt/croc/scripts -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
 fi
 
-# Ensure package list is in place
-sudo mkdir -p config/package-lists
-if [[ -f "$SOURCE_CONFIG/package-lists/croc.list.chroot" ]]; then
-  sudo cp "$SOURCE_CONFIG/package-lists/croc.list.chroot" config/package-lists/
+# Verify config structure
+if [[ ! -d config ]] || [[ ! -f config/auto/config ]]; then
+  echo "[!] Error: Config structure not properly created" >&2
+  exit 1
 fi
 
-# Build ISO
+echo "[+] Config directory structure ready (lb config skipped to avoid git clone issue)"
+
+# Build ISO directly - lb build should work with manually created config
 echo "[+] Starting ISO build (this will take 30-60 minutes)..."
 echo "[+] This is a long process - please be patient"
+echo "[+] Note: Using manually created config (lb config was skipped)"
+
+# Run lb build - it should use our manually created config
 sudo lb build
 
 # Check for output ISO
