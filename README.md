@@ -259,12 +259,12 @@ CrocLinux features **two theme options** designed for SOC analysts:
 
 **CrocLinux works exactly like Kali Linux:**
 
-- ✅ **ISO Creation**: Automated builds via GitHub Actions or local scripts
-- ✅ **VM Images**: Pre-built OVA files for VirtualBox/VMware
-- ✅ **Menu Organization**: Tools organized by category (like Kali)
-- ✅ **Easy Installation**: Simple installation process
-- ✅ **Pre-Configured**: All tools ready to use out of the box
-- ✅ **Documentation**: Comprehensive guides and tutorials
+-  >>**ISO Creation**: Automated builds via GitHub Actions or local scripts
+-  >>**VM Images**: Pre-built OVA files for VirtualBox/VMware
+-  >>**Menu Organization**: Tools organized by category (like Kali)
+-  >>**Easy Installation**: Simple installation process
+-  >>**Pre-Configured**: All tools ready to use out of the box
+-  >>**Documentation**: Comprehensive guides and tutorials
 
 **See**: [Kali Linux Compatibility Guide](docs/kali-linux-compatibility.md) for detailed comparison.
 
