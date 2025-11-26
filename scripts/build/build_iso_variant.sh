@@ -55,14 +55,23 @@ sudo rm -f .lb_* .build 2>/dev/null || true
 # The key is to NOT have any config/ directory when we start
 echo "[+] Initializing live-build configuration (this will create config/ directory)"
 
+# Check live-build version for debugging
+echo "[+] Live-build version: $(lb --version 2>/dev/null || echo 'unknown')"
+
 # Unset any environment variables that might cause live-build to look for config
 unset LB_CONFIG
 unset LB_CONFIG_DIRECTORY
 
+# Ensure we're in a completely clean environment
+# Create a minimal config directory structure manually if needed as fallback
+echo "[+] Ensuring clean environment for lb config"
+
 # Run lb config - it should create the config directory
-# Capture both stdout and stderr
+# Use explicit --no-auto flag if available, otherwise just run it
 LOG_FILE="/tmp/lb_config_$$.log"
-if ! sudo -E env -u LB_CONFIG -u LB_CONFIG_DIRECTORY lb config \
+echo "[+] Running lb config..."
+set +e  # Temporarily disable exit on error to capture the actual error
+sudo -E env -u LB_CONFIG -u LB_CONFIG_DIRECTORY lb config \
   --distribution bookworm \
   --architectures amd64 \
   --linux-flavours amd64 \
@@ -72,10 +81,17 @@ if ! sudo -E env -u LB_CONFIG -u LB_CONFIG_DIRECTORY lb config \
   --desktop xfce \
   --iso-application "CrocLinux" \
   --iso-volume "CROC_LINUX_GUARDIAN" \
-  --image-name "croc-linux" > "$LOG_FILE" 2>&1; then
-  echo "[!] Error: lb config failed" >&2
-  echo "[!] Output:" >&2
+  --image-name "croc-linux" > "$LOG_FILE" 2>&1
+LB_CONFIG_EXIT=$?
+set -e  # Re-enable exit on error
+
+if [[ $LB_CONFIG_EXIT -ne 0 ]]; then
+  echo "[!] Error: lb config failed with exit code $LB_CONFIG_EXIT" >&2
+  echo "[!] Full output:" >&2
   cat "$LOG_FILE" >&2 || true
+  echo "[!] Current directory: $(pwd)" >&2
+  echo "[!] Directory contents:" >&2
+  ls -la >&2 || true
   exit 1
 fi
 
