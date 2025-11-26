@@ -29,19 +29,20 @@ fi
 cp "$SOURCE_LIST" "$PACKAGE_LIST"
 echo "[+] Using package list $SOURCE_LIST"
 
-# Navigate to build directory
-cd build/iso
+# Get absolute path to project root
+PROJECT_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+cd "$PROJECT_ROOT"
 
-# Work in a clean subdirectory to avoid conflicts with source config/
-WORK_DIR="work"
-mkdir -p "$WORK_DIR"
-cd "$WORK_DIR"
+# Create a completely separate build directory outside source tree
+BUILD_ROOT="/tmp/croclinux-build-$$"
+mkdir -p "$BUILD_ROOT"
+cd "$BUILD_ROOT"
 
-# Clean previous builds
+echo "[+] Working in clean build directory: $BUILD_ROOT"
+
+# Clean any previous builds
 echo "[+] Cleaning previous builds"
-sudo lb clean --purge || true
-
-# Ensure we're starting completely fresh
+sudo lb clean --purge 2>/dev/null || true
 sudo rm -rf config .build binary cache auto 2>/dev/null || true
 
 # Initialize live-build configuration
@@ -58,43 +59,53 @@ sudo lb config \
   --iso-volume "CROC_LINUX_GUARDIAN" \
   --image-name "croc-linux"
 
+# Verify config directory was created
+if [[ ! -d config ]]; then
+  echo "[!] Error: lb config did not create config/ directory" >&2
+  exit 1
+fi
+
 # Copy our custom configuration files into the generated config directory
 echo "[+] Copying custom configuration files from source"
 
+SOURCE_CONFIG="$PROJECT_ROOT/build/iso/config"
+SOURCE_PRESEED="$PROJECT_ROOT/build/iso/preseed"
+SOURCE_SCRIPTS="$PROJECT_ROOT/build/iso/scripts"
+
 # Copy package lists
-if [[ -d ../../config/package-lists ]]; then
+if [[ -d "$SOURCE_CONFIG/package-lists" ]]; then
   sudo mkdir -p config/package-lists
-  sudo cp ../../config/package-lists/*.chroot config/package-lists/ 2>/dev/null || true
+  sudo cp "$SOURCE_CONFIG/package-lists"/*.chroot config/package-lists/ 2>/dev/null || true
 fi
 
 # Copy includes.chroot (files to include in the system)
-if [[ -d ../../config/includes.chroot ]]; then
-  sudo cp -r ../../config/includes.chroot/* config/includes.chroot/ 2>/dev/null || true
+if [[ -d "$SOURCE_CONFIG/includes.chroot" ]]; then
+  sudo cp -r "$SOURCE_CONFIG/includes.chroot"/* config/includes.chroot/ 2>/dev/null || true
 fi
 
 # Copy includes.binary (files for the ISO)
-if [[ -d ../../config/includes.binary ]]; then
-  sudo cp -r ../../config/includes.binary/* config/includes.binary/ 2>/dev/null || true
+if [[ -d "$SOURCE_CONFIG/includes.binary" ]]; then
+  sudo cp -r "$SOURCE_CONFIG/includes.binary"/* config/includes.binary/ 2>/dev/null || true
 fi
 
 # Copy preseed files
-if [[ -d ../../preseed ]]; then
+if [[ -d "$SOURCE_PRESEED" ]]; then
   sudo mkdir -p config/preseed
-  sudo cp ../../preseed/* config/preseed/ 2>/dev/null || true
+  sudo cp "$SOURCE_PRESEED"/* config/preseed/ 2>/dev/null || true
 fi
 
 # Copy scripts to chroot
-if [[ -d ../../scripts ]]; then
+if [[ -d "$SOURCE_SCRIPTS" ]]; then
   sudo mkdir -p config/includes.chroot/opt/croc/scripts
-  sudo cp -r ../../scripts/* config/includes.chroot/opt/croc/scripts/ 2>/dev/null || true
+  sudo cp -r "$SOURCE_SCRIPTS"/* config/includes.chroot/opt/croc/scripts/ 2>/dev/null || true
   # Make scripts executable
   sudo find config/includes.chroot/opt/croc/scripts -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
 fi
 
 # Ensure package list is in place
 sudo mkdir -p config/package-lists
-if [[ -f ../../config/package-lists/croc.list.chroot ]]; then
-  sudo cp ../../config/package-lists/croc.list.chroot config/package-lists/
+if [[ -f "$SOURCE_CONFIG/package-lists/croc.list.chroot" ]]; then
+  sudo cp "$SOURCE_CONFIG/package-lists/croc.list.chroot" config/package-lists/
 fi
 
 # Build ISO
@@ -116,23 +127,27 @@ fi
 
 # Move ISO to release directory
 DATE_TAG=$(date +%Y%m%d)
-ISO_DEST="../../../release/CrocLinux-${VARIANT}-${DATE_TAG}.iso"
+ISO_DEST="$PROJECT_ROOT/release/CrocLinux-${VARIANT}-${DATE_TAG}.iso"
 
-mkdir -p ../../../release
+mkdir -p "$PROJECT_ROOT/release"
 mv "$ISO_SRC" "$ISO_DEST"
-
-cd ../../..
 
 echo "[+] ISO written to $ISO_DEST"
 
 # Generate checksums
+cd "$PROJECT_ROOT/release"
 if command -v sha256sum >/dev/null; then
-  (cd release && sha256sum "CrocLinux-${VARIANT}-${DATE_TAG}.iso" >> sha256sums.txt)
+  sha256sum "CrocLinux-${VARIANT}-${DATE_TAG}.iso" >> sha256sums.txt
   echo "[+] SHA-256 checksum appended to release/sha256sums.txt"
 fi
 if command -v sha512sum >/dev/null; then
-  (cd release && sha512sum "CrocLinux-${VARIANT}-${DATE_TAG}.iso" >> sha512sums.txt)
+  sha512sum "CrocLinux-${VARIANT}-${DATE_TAG}.iso" >> sha512sums.txt
   echo "[+] SHA-512 checksum appended to release/sha512sums.txt"
 fi
+
+# Cleanup build directory
+echo "[+] Cleaning up temporary build directory"
+cd "$PROJECT_ROOT"
+sudo rm -rf "$BUILD_ROOT" 2>/dev/null || true
 
 echo "[+] Build complete! ISO: $ISO_DEST"
