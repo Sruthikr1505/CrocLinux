@@ -92,8 +92,8 @@ echo "[+] Config directory created successfully by lb config"
 echo "[+] Adding additional configuration settings to config files"
 
 # Create/update auto/config with all our settings
-mkdir -p config/auto
-cat > config/auto/config <<'EOF'
+sudo mkdir -p config/auto
+sudo cat > config/auto/config <<'EOF'
 #!/bin/sh
 # CrocLinux configuration
 LB_DISTRIBUTION="bookworm"
@@ -108,11 +108,11 @@ LB_ISO_VOLUME="CROC_LINUX_GUARDIAN"
 LB_IMAGE_NAME="croc-linux"
 EOF
 
-chmod +x config/auto/config
+sudo chmod +x config/auto/config
 
 # Also create config/common if it doesn't exist
 if [[ ! -f config/common ]]; then
-  cat > config/common <<'EOF'
+  sudo cat > config/common <<'EOF'
 #!/bin/sh
 LB_DISTRIBUTION="bookworm"
 LB_ARCHITECTURES="amd64"
@@ -125,7 +125,7 @@ LB_ISO_APPLICATION="CrocLinux"
 LB_ISO_VOLUME="CROC_LINUX_GUARDIAN"
 LB_IMAGE_NAME="croc-linux"
 EOF
-  chmod +x config/common
+  sudo chmod +x config/common
 fi
 
 echo "[+] Additional configuration settings added"
