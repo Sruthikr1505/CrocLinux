@@ -31,7 +31,7 @@ This guide confirms that CrocLinux is fully configured to work exactly like Kali
 
 ### Step 1: Verify Setup
 ```bash
-cd "/Users/sruthikr/Desktop/Croc Linux "
+cd /Users/sruthikr/CascadeProjects/CrocLinux
 ./scripts/verify-setup.sh
 ```
 

@@ -7,7 +7,7 @@ This guide explains how to publish CrocLinux to GitHub, create releases, and mak
 
 ### 1.1 Initialize Git Repository
 ```bash
-cd "/Users/sruthikr/Desktop/Croc Linux "
+cd /Users/sruthikr/CascadeProjects/CrocLinux
 git init
 git add .
 git commit -m "Initial CrocLinux release"

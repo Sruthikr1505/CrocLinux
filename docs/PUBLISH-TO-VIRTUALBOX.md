@@ -5,7 +5,7 @@
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                    STEP 1: PREPARE                         │
-│  cd "/Users/sruthikr/Desktop/Croc Linux "                  │
+│  cd /Users/sruthikr/CascadeProjects/CrocLinux                  │
 │  ./scripts/verify-setup.sh                                  │
 │  ✅ Verify all files are ready                              │
 └─────────────────────────────────────────────────────────────┘
@@ -122,7 +122,7 @@
 
 ### ✅ Step 1: Verify Setup (2 minutes)
 ```bash
-cd "/Users/sruthikr/Desktop/Croc Linux "
+cd /Users/sruthikr/CascadeProjects/CrocLinux
 ./scripts/verify-setup.sh
 ```
 **Result**: ✅ All checks passed!

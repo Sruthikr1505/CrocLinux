@@ -11,7 +11,7 @@ This guide provides exact step-by-step instructions for every aspect of CrocLinu
 ### Step 1: Verify Your Setup
 ```bash
 # Navigate to project directory
-cd "/Users/sruthikr/Desktop/Croc Linux "
+cd /Users/sruthikr/CascadeProjects/CrocLinux
 
 # Run verification script
 ./scripts/verify-setup.sh
@@ -93,7 +93,7 @@ sudo apt-get install -y \
 #### Step 2: Build ISO
 ```bash
 # Navigate to project
-cd "/Users/sruthikr/Desktop/Croc Linux "
+cd /Users/sruthikr/CascadeProjects/CrocLinux
 
 # Make script executable
 chmod +x scripts/build/build_iso_variant.sh

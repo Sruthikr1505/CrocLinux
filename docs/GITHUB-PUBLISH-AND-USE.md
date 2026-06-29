@@ -10,7 +10,7 @@ This guide walks you through publishing CrocLinux on GitHub, building ISO images
 ### Step 1: Verify Your Setup
 ```bash
 # Navigate to project directory
-cd "/Users/sruthikr/Desktop/Croc Linux "
+cd /Users/sruthikr/CascadeProjects/CrocLinux
 
 # Run verification script
 ./scripts/verify-setup.sh

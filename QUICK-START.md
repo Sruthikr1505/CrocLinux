@@ -4,7 +4,7 @@
 
 ### Step 1: Publish to GitHub (5 minutes)
 ```bash
-cd "/Users/sruthikr/Desktop/Croc Linux "
+cd /Users/sruthikr/CascadeProjects/CrocLinux
 git init
 git add .
 git commit -m "Initial CrocLinux release"
