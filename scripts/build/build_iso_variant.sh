@@ -68,7 +68,10 @@ sudo env -i \
   lb config \
   --distribution bookworm \
   --architectures amd64 \
-  --linux-flavours amd64 > "$LOG_FILE" 2>&1 || {
+  --linux-flavours amd64 \
+  --mirror-bootstrap "http://deb.debian.org/debian/" \
+  --mirror-binary "http://deb.debian.org/debian/" \
+  --mirror-binary-security "http://security.debian.org/" > "$LOG_FILE" 2>&1 || {
   echo "[!] Error: lb config failed" >&2
   echo "[!] Full output:" >&2
   cat "$LOG_FILE" >&2 || true
