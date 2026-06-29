@@ -93,7 +93,7 @@ echo "[+] Adding additional configuration settings to config files"
 
 # Create/update auto/config with all our settings
 sudo mkdir -p config/auto
-sudo cat > config/auto/config <<'EOF'
+sudo tee config/auto/config > /dev/null <<'EOF'
 #!/bin/sh
 # CrocLinux configuration
 LB_DISTRIBUTION="bookworm"
@@ -112,7 +112,7 @@ sudo chmod +x config/auto/config
 
 # Also create config/common if it doesn't exist
 if [[ ! -f config/common ]]; then
-  sudo cat > config/common <<'EOF'
+  sudo tee config/common > /dev/null <<'EOF'
 #!/bin/sh
 LB_DISTRIBUTION="bookworm"
 LB_ARCHITECTURES="amd64"
